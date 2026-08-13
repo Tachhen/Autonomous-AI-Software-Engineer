@@ -26,18 +26,11 @@ class CodingAgent:
             timeout=60.0
         )
 
-    # ==================================================
-    # TOOL DEFINITIONS
-    # ==================================================
+    #Tools
 
     def tool_definitions(self):
-
         return [
-
-            # --------------------------------------------------
-            # LIST FILES
-            # --------------------------------------------------
-
+            #LIST FILES
             {
                 "type": "function",
                 "function": {
@@ -54,11 +47,7 @@ class CodingAgent:
                     }
                 }
             },
-
-            # --------------------------------------------------
-            # READ FILE
-            # --------------------------------------------------
-
+            #READ FILE
             {
                 "type": "function",
                 "function": {
@@ -82,11 +71,7 @@ class CodingAgent:
                     }
                 }
             },
-
-            # --------------------------------------------------
-            # SEARCH CODE - RAG
-            # --------------------------------------------------
-
+            #SEARCH CODE
             {
                 "type": "function",
                 "function": {
@@ -113,11 +98,7 @@ class CodingAgent:
                     }
                 }
             },
-
-            # --------------------------------------------------
-            # EDIT FILE
-            # --------------------------------------------------
-
+            #EDIT FILE
             {
                 "type": "function",
                 "function": {
@@ -153,11 +134,7 @@ class CodingAgent:
                     }
                 }
             },
-
-            # --------------------------------------------------
-            # RUN TESTS
-            # --------------------------------------------------
-
+            #RUN TEST
             {
                 "type": "function",
                 "function": {
@@ -175,27 +152,12 @@ class CodingAgent:
             }
         ]
 
-    # ==================================================
-    # EXECUTE TOOL
-    # ==================================================
 
     def execute_tool(self, name, arguments):
-
         print(f"\n[TOOL] {name}")
         print(f"[ARGS] {arguments}")
-
-        # --------------------------------------------------
-        # LIST FILES
-        # --------------------------------------------------
-
         if name == "list_files":
-
             result = self.tools.list_files()
-
-        # --------------------------------------------------
-        # READ FILE
-        # --------------------------------------------------
-
         elif name == "read_file":
 
             path = arguments["path"]
@@ -203,11 +165,7 @@ class CodingAgent:
             result = self.tools.read_file(path)
 
             self.memory.record_file_read(path)
-
-        # --------------------------------------------------
-        # SEARCH CODE - RAG
-        # --------------------------------------------------
-
+        #SEARCH CODE USING RAG
         elif name == "search_code":
 
             query = arguments["query"]
@@ -239,41 +197,27 @@ LINES: {item['start_line']}-{item['end_line']}
                 result = "\n\n---\n\n".join(
                     formatted_results
                 )
-
-        # --------------------------------------------------
-        # EDIT FILE
-        # --------------------------------------------------
-
+        #EDIT
         elif name == "edit_file":
 
             path = arguments["path"]
-
-            # Safety rule:
-            # Never allow the agent to modify tests.
-
             if (
                 path.startswith("tests/")
                 or path.startswith("test_")
                 or "/tests/" in path
             ):
-
+            #SAFETY 
                 result = (
                     "ERROR: Tests cannot be modified by "
                     "the agent. Modify the source code instead."
                 )
-
             else:
-
                 result = self.tools.edit_file(
                     path,
                     arguments["content"]
                 )
 
                 self.memory.record_file_modified(path)
-
-        # --------------------------------------------------
-        # RUN TESTS
-        # --------------------------------------------------
 
         elif name == "run_tests":
 
@@ -288,50 +232,22 @@ LINES: {item['start_line']}-{item['end_line']}
                 indent=2
             )
 
-        # --------------------------------------------------
-        # UNKNOWN TOOL
-        # --------------------------------------------------
-
         else:
 
             result = f"Unknown tool: {name}"
-
-        # --------------------------------------------------
-        # RECORD ACTION IN MEMORY
-        # --------------------------------------------------
-
+        #ADD TO MEMORY
         self.memory.record_action(
             name,
             arguments,
             result
         )
-
         return result
 
-    # ==================================================
-    # AGENT RUNNER
-    # ==================================================
 
     def run(self, task):
-
-        # --------------------------------------------------
-        # START MEMORY
-        # --------------------------------------------------
-
         self.memory.start_task(task)
-
         previous_memory = self.memory.context()
-
-        # ==================================================
-        # MESSAGES
-        # ==================================================
-
         messages = [
-
-            # --------------------------------------------------
-            # SYSTEM PROMPT
-            # --------------------------------------------------
-
             {
                 "role": "system",
 
@@ -485,11 +401,6 @@ modify, and validate the repository.
 
 """.strip()
             },
-
-            # --------------------------------------------------
-            # MEMORY
-            # --------------------------------------------------
-
             {
                 "role": "system",
 
@@ -516,22 +427,12 @@ of truth.
 """
                 )
             },
-
-            # --------------------------------------------------
-            # USER TASK
-            # --------------------------------------------------
-
             {
                 "role": "user",
                 "content": task
             }
         ]
-
         tools = self.tool_definitions()
-
-        # ==================================================
-        # AGENT LOOP
-        # ==================================================
 
         for iteration in range(10):
 
@@ -551,20 +452,10 @@ of truth.
             )
 
             message = response.choices[0].message
-
-            # --------------------------------------------------
-            # AI TEXT
-            # --------------------------------------------------
-
             if message.content:
 
                 print("\n[AI]")
                 print(message.content)
-
-            # --------------------------------------------------
-            # FINISHED
-            # --------------------------------------------------
-
             if not message.tool_calls:
 
                 self.memory.complete_task()
@@ -574,16 +465,7 @@ of truth.
                     or "Agent finished."
                 )
 
-            # --------------------------------------------------
-            # ADD ASSISTANT MESSAGE
-            # --------------------------------------------------
-
             messages.append(message)
-
-            # --------------------------------------------------
-            # EXECUTE TOOLS
-            # --------------------------------------------------
-
             for tool_call in message.tool_calls:
 
                 name = tool_call.function.name
@@ -610,11 +492,6 @@ of truth.
                         "content": str(result)
                     }
                 )
-
-        # ==================================================
-        # MAX ITERATIONS
-        # ==================================================
-
         return (
             "Agent stopped after reaching "
             "the maximum number of iterations."

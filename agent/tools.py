@@ -70,12 +70,10 @@ class RepositoryTools:
 
         except Exception as e:
             return f"Error writing file: {e}"
-
     def run_tests(self):
         env = os.environ.copy()
 
-        env["PYTHONPATH"] = self.workspace
-
+        env["PYTHONPATH"] = self.workspac
         try:
             result = subprocess.run(
                 ["pytest", "-q"],
@@ -85,20 +83,17 @@ class RepositoryTools:
                 text=True,
                 timeout=60
             )
-
             return {
                 "exit_code": result.returncode,
                 "stdout": result.stdout,
                 "stderr": result.stderr
             }
-
         except subprocess.TimeoutExpired:
             return {
                 "exit_code": -1,
                 "stdout": "",
                 "stderr": "Tests timed out after 60 seconds."
             }
-
         except Exception as e:
             return {
                 "exit_code": -1,
