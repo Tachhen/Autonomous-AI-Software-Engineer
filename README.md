@@ -97,3 +97,45 @@ Successful? ── No ──→ Investigate Again
  Yes
   ↓
 Complete
+
+---
+
+## Technology and Implementation
+
+The project is built in Python and combines an LLM with repository tools,
+code retrieval, a vector database, and test execution.
+
+### LLM
+
+The agent uses an LLM as its reasoning engine. The model receives the user's
+task, information retrieved from the repository, and the results returned by
+the tools available to it.
+
+I initially looked at using OpenAI's API, but API usage requires a paid
+account. For this project, I used **OpenRouter** instead, which provides access
+to different LLMs through a common API.
+
+This also makes the project easier to experiment with because the underlying
+model can be changed without having to redesign the rest of the agent.
+
+### OpenRouter
+
+OpenRouter acts as the interface between the application and the language
+model.
+
+The basic flow is:
+
+```text
+User Task
+    ↓
+Coding Agent
+    ↓
+OpenRouter API
+    ↓
+LLM
+    ↓
+Agent Decision
+    ↓
+Tool Execution
+    ↓
+Result returned to Agent
