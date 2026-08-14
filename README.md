@@ -101,6 +101,61 @@ Complete
 
 ---
 
+## Evaluation
+
+To evaluate the agent beyond a single demonstration, I built an automated evaluation harness that tests the agent against multiple intentionally broken repositories.
+
+The benchmark currently covers:
+
+- **Syntax errors**
+- **Logic errors**
+- **Missing functionality**
+- **Multi-file repository tasks**
+- **Multiple simultaneous bugs**
+
+For each task, the evaluator creates an isolated copy of the repository, gives the task to the autonomous agent, and verifies the result by running the project's test suite.
+
+### Evaluation Process
+
+```text
+Broken Repository
+       ↓
+   Agent receives task
+       ↓
+ Repository inspection
+       ↓
+ Code retrieval / search
+       ↓
+    Code modification
+       ↓
+      Run tests
+       ↓
+  Analyze test results
+       ↓
+   Fix if necessary
+       ↓
+     Run tests again
+       ↓
+    Success / Failure
+```
+
+The evaluation produces a measurable result for each task, allowing the agent's ability to autonomously diagnose and repair different classes of software issues to be tested rather than demonstrated on a single example.
+
+### Initial Benchmark Results
+
+![Agent Evaluation Results](assets/evaluation.png)
+
+| Metric | Result |
+|---|---:|
+| Tasks evaluated | 5 |
+| Successful tasks | 4 |
+| Failed tasks | 1 |
+| Success rate | **80%** |
+| Average execution time | **58.37 seconds** |
+
+This initial benchmark provides a baseline for measuring improvements to the agent's reasoning, retrieval, tool usage, and iterative error-recovery capabilities.
+    ---
+
 ## Technology and Implementation
 
 The project is built in Python and combines an LLM with repository tools,
