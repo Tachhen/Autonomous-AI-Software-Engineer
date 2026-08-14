@@ -73,7 +73,7 @@ class RepositoryTools:
     def run_tests(self):
         env = os.environ.copy()
 
-        env["PYTHONPATH"] = self.workspac
+        env["PYTHONPATH"] = self.workspace
         try:
             result = subprocess.run(
                 ["pytest", "-q"],
