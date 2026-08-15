@@ -177,7 +177,7 @@ model can be changed without having to redesign the rest of the agent.
 
 ### OpenRouter
 
-OpenRouter acts as the interface between the application and the language
+OpenRouter acts as the interface between the application and the  language
 model.
 
 The basic flow is:
