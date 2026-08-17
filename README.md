@@ -149,46 +149,32 @@ For example, when given the task:
 Fix the calculator bug
 
 the planner generated:
-
-1. Inspect files related to calculator operations 
-2. Identify specific inputs causing the bug 
-3. Analyze arithmetic logic for errors
-4. Implement correct calculations or conditions 
-5. Run test suite to verify fix
-The coding agent then follows the plan while using the repository tools:
 ![alt text](assets/evaluation.png)
-[AGENT ITERATION 1]
+The coding agent then follows the plan while using the repository tools:
 
-[TOOL] list_files
-
-[AGENT ITERATION 2]
-
-[TOOL] read_file
-[ARGS] {'path': 'calculator.py'}
-
-[AGENT ITERATION 3]
-
-[TOOL] run_tests
-
-[AGENT ITERATION 4]
-
-[TOOL] edit_file
-[ARGS] {'path': 'calculator.py', ...}
-
-[AGENT ITERATION 5]
-
-[TOOL] run_tests
-
-After the implementation is verified, the agent produces a final result:
-
-FINAL RESULT
-
-The calculator bug has been successfully fixed.
-The add function in calculator.py was corrected to
-return a + b instead of a - b.
-
-All tests now pass.
-
+```text
+User Task
+    ↓
+Repository Structure
+    ↓
+     Planner
+    ↓
+Implementation Plan
+    ↓
+Repository Inspection
+    ↓
+Code Modification
+    ↓
+   Run Tests
+    ↓
+Analyze Test Results
+    ↓
+Fix if Necessary
+    ↓
+ Run Tests Again
+    ↓
+Success / Failure
+```
 This demonstrates the complete planning-to-execution workflow, where the agent first creates an implementation plan and then autonomously inspects, modifies, and validates the repository.
 
 ### Initial Benchmark Results
