@@ -149,7 +149,7 @@ For example, when given the task:
 Fix the calculator bug
 
 the planner generated:
-![alt text](assets/evaluation.png)
+![alt text](assets/implement.png)
 The coding agent then follows the plan while using the repository tools:
 
 ```text
