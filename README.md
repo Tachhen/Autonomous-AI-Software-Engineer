@@ -141,6 +141,56 @@ Broken Repository
 
 The evaluation produces a measurable result for each task, allowing the agent's ability to autonomously diagnose and repair different classes of software issues to be tested rather than demonstrated on a single example.
 
+### Implementation Plan
+The planning stage is executed before the autonomous coding loop begins. The generated plan is displayed in the terminal and then provided to the coding agent as additional context.
+
+For example, when given the task:
+
+Fix the calculator bug
+
+the planner generated:
+
+1. Inspect files related to calculator operations 
+2. Identify specific inputs causing the bug 
+3. Analyze arithmetic logic for errors
+4. Implement correct calculations or conditions 
+5. Run test suite to verify fix
+The coding agent then follows the plan while using the repository tools:
+![alt text](assets/evaluation.png)
+[AGENT ITERATION 1]
+
+[TOOL] list_files
+
+[AGENT ITERATION 2]
+
+[TOOL] read_file
+[ARGS] {'path': 'calculator.py'}
+
+[AGENT ITERATION 3]
+
+[TOOL] run_tests
+
+[AGENT ITERATION 4]
+
+[TOOL] edit_file
+[ARGS] {'path': 'calculator.py', ...}
+
+[AGENT ITERATION 5]
+
+[TOOL] run_tests
+
+After the implementation is verified, the agent produces a final result:
+
+FINAL RESULT
+
+The calculator bug has been successfully fixed.
+The add function in calculator.py was corrected to
+return a + b instead of a - b.
+
+All tests now pass.
+
+This demonstrates the complete planning-to-execution workflow, where the agent first creates an implementation plan and then autonomously inspects, modifies, and validates the repository.
+
 ### Initial Benchmark Results
 
 ![Agent Evaluation Results](assets/evaluation.png)
