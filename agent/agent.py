@@ -1,8 +1,6 @@
 import json
 import os
-
 from openai import OpenAI
-
 from agent.tools import RepositoryTools
 from rag.retriever import CodeRetriever
 from memory.memory import AgentMemory
@@ -22,8 +20,8 @@ class CodingAgent:
             timeout=60.0
         )
         self.planner=Planner(self.client)
-    #Tools
 
+    #Tools
     def tool_definitions(self):
         return [
             #LIST FILES
@@ -32,8 +30,8 @@ class CodingAgent:
                 "function": {
                     "name": "list_files",
                     "description": (
-                        "List all files in the repository. "
-                        "This must be called before inspecting "
+                        "Gets a list of all files in the repository. "
+                        "Use this before inspecting or editing files."
                         "or editing files."
                     ),
                     "parameters": {
