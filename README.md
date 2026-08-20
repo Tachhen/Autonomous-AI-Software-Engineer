@@ -64,7 +64,7 @@ calculator project and ran its test suite.
 
 The test suite detects that the implementation is incorrect.
 
-![Initial test failure](assets/failure.png)
+![Initial test failure](assets/before_main.png)
 
 I then gave the task to the autonomous agent through `main.py`.
 
@@ -74,8 +74,8 @@ the implementation, and ran the tests again.
 ### Result
 
 The tests passed after the agent made the necessary change.
-
-![Successful test run](assets/success.png)
+![Understanding the Problem](assets/finding_problemz.png)
+![Successful test run](assets/fixed.png)
 
 This demonstrates the basic feedback loop of the system:
 
